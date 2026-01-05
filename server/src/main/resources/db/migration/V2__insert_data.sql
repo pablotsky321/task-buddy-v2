@@ -1,0 +1,1 @@
+insert into users(complete_name, email, password) values ('Juan Pablo Restrepo', 'admin@example.com','$2a$10$nG2wL32XTNUpAB6VzWMVW.dLP8KJm4laKD3kyi5jETFVp2p5fJ1Pq')
