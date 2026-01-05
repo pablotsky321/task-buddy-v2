@@ -5,7 +5,7 @@ import com.dev.server.entities.UserEntity;
 import com.dev.server.exceptions.DataExistsException;
 import com.dev.server.repositories.UserRepository;
 import com.dev.server.requests.LoginRequest;
-import com.dev.server.security.services.UserDetailServiceImp;
+import com.dev.server.security.services.UserDetailsServiceImp;
 import com.dev.server.security.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,7 +31,7 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserDetailServiceImp userDetailsService;
+    private UserDetailsServiceImp userDetailsService;
 
     public UserDTO register(UserDTO userDTO) throws DataExistsException{
         if( userRepository.findByEmail(userDTO.getEmail()).isPresent()){
@@ -42,6 +42,7 @@ public class AuthService {
         userEntity.setCompleteName(userDTO.getCompleteName());
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userDTO.setId(userRepository.save(userEntity).getId().toString());
+        userDTO.setPassword(null);
         return userDTO;
     }
 
@@ -64,8 +65,6 @@ public class AuthService {
         String password = loginRequest.password();
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-
-        if(userDetails == null) throw new BadCredentialsException("Invalid email or password");
 
         if(!passwordEncoder.matches(password, userDetails.getPassword())) throw new BadCredentialsException("Invalid password");
 

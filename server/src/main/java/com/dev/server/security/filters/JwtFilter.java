@@ -1,6 +1,6 @@
 package com.dev.server.security.filters;
 
-import com.dev.server.security.services.UserDetailServiceImp;
+import com.dev.server.security.services.UserDetailsServiceImp;
 import com.dev.server.security.utils.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     JwtService jwtService;
 
     @Autowired
-    UserDetailServiceImp userDetailsService;
+    UserDetailsServiceImp userDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {

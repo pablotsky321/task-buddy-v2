@@ -13,4 +13,4 @@ spring:
     show-sql: true
 
 secret:
-  jwt: ${SECRET:5f7eb49099eacde69a71f28ec55cd7b5b241b67b548de6903aa78123698bceba}
+  jwt: ${JWT_SECRET:5f7eb49099eacde69a71f28ec55cd7b5b241b67b548de6903aa78123698bceba}
