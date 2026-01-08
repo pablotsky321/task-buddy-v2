@@ -1,0 +1,46 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-subtitle">Join Task Buddy and boost your productivity</p>
+        </div>
+
+        <form [formGroup]="user_form" (submit)="register()" class="auth-form">
+            <div class="form-group">
+                <label for="completeName" class="form-label">Full Name</label>
+                <input type="text" formControlName="completeName" id="completeName" class="form-input"
+                    placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" formControlName="email" id="email" class="form-input"
+                    placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" formControlName="password" id="password" class="form-input"
+                    placeholder="Create a password">
+            </div>
+
+            <button type="submit" [disabled]="isLoading" class="btn btn-primary">
+                @if(isLoading) {
+                <span class="loader"></span>
+                Creating account...
+                } @else {
+                Create Account
+                }
+            </button>
+
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+
+            <button type="button" [disabled]="isLoading" class="btn btn-secondary"
+                (click)="router.navigate(['/login'])">
+                Already have an account? Sign In
+            </button>
+        </form>
+    </div>
+</div>

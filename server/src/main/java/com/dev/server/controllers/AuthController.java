@@ -6,6 +6,7 @@ import com.dev.server.requests.LoginRequest;
 import com.dev.server.services.AuthService;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -40,6 +42,7 @@ public class AuthController {
         } catch (DataExistsException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FOUND);
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new ResponseEntity<>("There was an unexpected error", HttpStatus.BAD_REQUEST);
         }
     }

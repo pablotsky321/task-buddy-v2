@@ -1,0 +1,40 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">Welcome Back</h1>
+            <p class="auth-subtitle">Sign in to continue to Task Buddy</p>
+        </div>
+
+        <form [formGroup]="loginForm" (submit)="login()" class="auth-form">
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" formControlName="email" id="email" class="form-input"
+                    placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" formControlName="password" id="password" class="form-input"
+                    placeholder="Enter your password">
+            </div>
+
+            <button [disabled]="isLoading" type="submit" class="btn btn-primary">
+                @if(isLoading) {
+                <span class="loader"></span>
+                Signing in...
+                } @else {
+                Sign In
+                }
+            </button>
+
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+
+            <button [disabled]="isLoading" type="button" class="btn btn-secondary"
+                (click)="router.navigate(['/register'])">
+                Create an Account
+            </button>
+        </form>
+    </div>
+</div>
