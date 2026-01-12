@@ -1,1 +1,94 @@
-<p>task-list works!</p>
+<div>
+    <button (click)="logout()">Logout</button>
+</div>
+<div>
+    <form [formGroup]="task_form" (submit)="addTask()">
+        <label for="title">Title</label>
+        <input type="text" id="title" formControlName="title">
+        <label for="description">Description</label>
+        <input type="text" id="description" formControlName="description">
+        <label for="finishAt">Finish At</label>
+        <input type="datetime-local" id="finishAt" formControlName="finishAt">
+        <button type="submit">Add Task</button>
+    </form>
+    @if(!loadingPage && task_list.length>0){
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Finish At</th>
+                <th>Completed At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (task of task_list; track task.id) {
+            <tr>
+                <td>{{task.title}}</td>
+                <td>{{task.description}}</td>
+                <td>{{task.finishAt}}</td>
+                <td>{{task.completedAt}}</td>
+                <td>
+                    <button (click)="delete(task.id)" [disabled]="loadingReq">Delete</button>
+                    <button (click)="openShowDetails(task.id)" [disabled]="loadingReq">Show details</button>
+                    <button (click)="openEditForm(task.id)" [disabled]="loadingReq">Edit</button>
+                    <button (click)="completeTask(task.id)" [disabled]="loadingReq">Completed</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+    @if(!loadingPage && task_list.length === 0){
+    <div>No tasks found</div>
+    }
+    @if(loadingPage){
+    <div>Loading...</div>
+    }
+</div>
+
+@if (show_details.show) {
+<div>
+    <div>
+        <button (click)="closeShowDetails()">Close</button>
+    </div>
+    <div>
+        <h2>Task details</h2>
+        <h3>title: </h3>
+        <p>{{show_details.task?.title}}</p>
+        <h3>description: </h3>
+        <p>{{show_details.task?.description}}</p>
+        <h3>state:</h3>
+        <p>{{show_details.task?.state}}</p>
+        <h3>created at:</h3>
+        <p>{{show_details.task?.createdAt}}</p>
+        <h3>updated at:</h3>
+        <p>{{show_details.task?.updatedAt}}</p>
+        <h3>finish at: </h3>
+        <p>{{show_details.task?.finishAt}}</p>
+        <h3>completed at: </h3>
+        <p>{{show_details.task?.completedAt}}</p>
+    </div>
+</div>
+}
+
+@if (show_update_form.show) {
+<div>
+    <div>
+        <button (click)="closeEditForm()">Close</button>
+    </div>
+    <div>
+        <h2>Update task</h2>
+        <form [formGroup]="task_form" (submit)="updateTask()">
+            <label for="title">Title</label>
+            <input type="text" id="title" formControlName="title">
+            <label for="description">Description</label>
+            <input type="text" id="description" formControlName="description">
+            <label for="finishAt">Finish At</label>
+            <input type="datetime-local" id="finishAt" formControlName="finishAt">
+            <button type="submit" [disabled]="loadingReq">Update</button>
+        </form>
+    </div>
+</div>
+}

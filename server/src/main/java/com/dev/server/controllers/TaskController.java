@@ -92,5 +92,15 @@ class TaskController {
         }
     }
 
+    @PutMapping("/complete/{id}")
+    public ResponseEntity<?> completeTask(@PathVariable String id) {
+        try{
+            return new ResponseEntity<>(taskService.completeTask(id), HttpStatus.ACCEPTED);
+        }catch (ClassNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>("There was an unexpected error", HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

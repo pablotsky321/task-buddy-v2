@@ -3,6 +3,7 @@ package com.dev.server.services;
 import com.dev.server.DTOs.TaskDTO;
 import com.dev.server.entities.TaskEntity;
 import com.dev.server.entities.UserEntity;
+import com.dev.server.enums.TaskState;
 import com.dev.server.exceptions.BadTimeException;
 import com.dev.server.repositories.TaskRepository;
 import com.dev.server.repositories.UserRepository;
@@ -41,6 +42,7 @@ public class TaskService {
         taskDTO.setCreatedAt(task.getCreatedAt());
         taskDTO.setUpdatedAt(task.getUpdatedAt());
         taskDTO.setFinishAt(task.getFinishAt());
+        taskDTO.setCompletedAt(task.getCompletedAt());
         return taskDTO;
     }
 
@@ -85,6 +87,14 @@ public class TaskService {
     public String deleteTask(String id) throws ClassNotFoundException {
         this.taskRepository.delete(task(id));
         return "task deleted";
+    }
+
+    public String completeTask(String id) throws ClassNotFoundException {
+        TaskEntity task = task(id);
+        task.setCompletedAt(Instant.now());
+        task.setState(TaskState.completed);
+        this.taskRepository.save(task);
+        return "task completed";
     }
 
 }

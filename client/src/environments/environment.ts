@@ -1,4 +1,4 @@
 export const environment = {
-    production: false,
-    API_URL: 'http://localhost:8000/api/tasks'
+    production: true,
+    API_URL: 'http://ec2-3-143-209-161.us-east-2.compute.amazonaws.com:80'
 };
