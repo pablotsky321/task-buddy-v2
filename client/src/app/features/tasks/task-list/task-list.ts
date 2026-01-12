@@ -4,10 +4,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TaskService } from '../task.service';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-task-list',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DatePipe],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
 })

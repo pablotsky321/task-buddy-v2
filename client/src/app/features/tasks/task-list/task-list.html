@@ -1,94 +1,173 @@
-<div>
-    <button (click)="logout()">Logout</button>
-</div>
-<div>
-    <form [formGroup]="task_form" (submit)="addTask()">
-        <label for="title">Title</label>
-        <input type="text" id="title" formControlName="title">
-        <label for="description">Description</label>
-        <input type="text" id="description" formControlName="description">
-        <label for="finishAt">Finish At</label>
-        <input type="datetime-local" id="finishAt" formControlName="finishAt">
-        <button type="submit">Add Task</button>
-    </form>
-    @if(!loadingPage && task_list.length>0){
-    <table>
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Finish At</th>
-                <th>Completed At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (task of task_list; track task.id) {
-            <tr>
-                <td>{{task.title}}</td>
-                <td>{{task.description}}</td>
-                <td>{{task.finishAt}}</td>
-                <td>{{task.completedAt}}</td>
-                <td>
-                    <button (click)="delete(task.id)" [disabled]="loadingReq">Delete</button>
-                    <button (click)="openShowDetails(task.id)" [disabled]="loadingReq">Show details</button>
-                    <button (click)="openEditForm(task.id)" [disabled]="loadingReq">Edit</button>
-                    <button (click)="completeTask(task.id)" [disabled]="loadingReq">Completed</button>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
+<div class="task-container">
+    <!-- Header -->
+    <div class="task-header">
+        <h1 class="task-title">My Tasks</h1>
+        <button (click)="logout()" class="btn btn-logout">Logout</button>
+    </div>
+
+    <!-- Add Task Form -->
+    <div class="form-card">
+        <h2>Add New Task</h2>
+        <form [formGroup]="task_form" (submit)="addTask()" class="task-form">
+            <div class="form-group">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" formControlName="title" class="form-input" placeholder="Enter task title">
+            </div>
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" id="description" formControlName="description" class="form-input"
+                    placeholder="Enter task description">
+            </div>
+            <div class="form-group">
+                <label for="finishAt" class="form-label">Finish At</label>
+                <input type="datetime-local" id="finishAt" formControlName="finishAt" class="form-input">
+            </div>
+            <div class="form-group" style="display: flex; align-items: flex-end;">
+                <button type="submit" [disabled]="loadingReq" class="btn btn-primary" style="width: 100%;">
+                    @if(loadingReq) {
+                    <span class="loader"></span>
+                    Adding...
+                    } @else {
+                    Add Task
+                    }
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Task Table -->
+    @if(!loadingPage && task_list.length > 0){
+    <div class="table-container">
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Finish At</th>
+                    <th>Completed At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (task of task_list; track task.id) {
+                <tr>
+                    <td>{{task.title}}</td>
+                    <td>{{task.description}}</td>
+                    <td>{{task.finishAt | date:'short'}}</td>
+                    <td>{{task.completedAt ? (task.completedAt | date:'short') : '-'}}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button (click)="openShowDetails(task.id)" [disabled]="loadingReq"
+                                class="btn btn-secondary">Details</button>
+                            <button (click)="openEditForm(task.id)" [disabled]="loadingReq"
+                                class="btn btn-primary">Edit</button>
+                            <button (click)="completeTask(task.id)" [disabled]="loadingReq"
+                                class="btn btn-success">Complete</button>
+                            <button (click)="delete(task.id)" [disabled]="loadingReq"
+                                class="btn btn-danger">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
     }
+
+    <!-- Empty State -->
     @if(!loadingPage && task_list.length === 0){
-    <div>No tasks found</div>
+    <div class="empty-state">
+        <h3>No tasks found</h3>
+        <p>Start by adding your first task above!</p>
+    </div>
     }
+
+    <!-- Loading State -->
     @if(loadingPage){
-    <div>Loading...</div>
+    <div class="loading-state">
+        <div class="loader"></div>
+        <p>Loading tasks...</p>
+    </div>
     }
 </div>
 
+<!-- Task Details Modal -->
 @if (show_details.show) {
-<div>
-    <div>
-        <button (click)="closeShowDetails()">Close</button>
-    </div>
-    <div>
-        <h2>Task details</h2>
-        <h3>title: </h3>
-        <p>{{show_details.task?.title}}</p>
-        <h3>description: </h3>
-        <p>{{show_details.task?.description}}</p>
-        <h3>state:</h3>
-        <p>{{show_details.task?.state}}</p>
-        <h3>created at:</h3>
-        <p>{{show_details.task?.createdAt}}</p>
-        <h3>updated at:</h3>
-        <p>{{show_details.task?.updatedAt}}</p>
-        <h3>finish at: </h3>
-        <p>{{show_details.task?.finishAt}}</p>
-        <h3>completed at: </h3>
-        <p>{{show_details.task?.completedAt}}</p>
+<div class="modal-overlay" (click)="closeShowDetails()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Task Details</h2>
+            <button (click)="closeShowDetails()" class="modal-close">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div class="detail-item">
+                <h3>Title</h3>
+                <p>{{show_details.task?.title}}</p>
+            </div>
+            <div class="detail-item">
+                <h3>Description</h3>
+                <p>{{show_details.task?.description}}</p>
+            </div>
+            <div class="detail-item">
+                <h3>State</h3>
+                <p>{{show_details.task?.state}}</p>
+            </div>
+            <div class="detail-item">
+                <h3>Created At</h3>
+                <p>{{show_details.task?.createdAt | date:'medium'}}</p>
+            </div>
+            <div class="detail-item">
+                <h3>Updated At</h3>
+                <p>{{show_details.task?.updatedAt | date:'medium'}}</p>
+            </div>
+            <div class="detail-item">
+                <h3>Finish At</h3>
+                <p>{{show_details.task?.finishAt | date:'medium'}}</p>
+            </div>
+            <div class="detail-item">
+                <h3>Completed At</h3>
+                <p>{{show_details.task?.completedAt ? (show_details.task?.completedAt | date:'medium') : 'Not completed
+                    yet'}}</p>
+            </div>
+        </div>
     </div>
 </div>
 }
 
+<!-- Edit Task Modal -->
 @if (show_update_form.show) {
-<div>
-    <div>
-        <button (click)="closeEditForm()">Close</button>
-    </div>
-    <div>
-        <h2>Update task</h2>
-        <form [formGroup]="task_form" (submit)="updateTask()">
-            <label for="title">Title</label>
-            <input type="text" id="title" formControlName="title">
-            <label for="description">Description</label>
-            <input type="text" id="description" formControlName="description">
-            <label for="finishAt">Finish At</label>
-            <input type="datetime-local" id="finishAt" formControlName="finishAt">
-            <button type="submit" [disabled]="loadingReq">Update</button>
-        </form>
+<div class="modal-overlay" (click)="closeEditForm()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Update Task</h2>
+            <button (click)="closeEditForm()" class="modal-close">&times;</button>
+        </div>
+        <div class="modal-content">
+            <form [formGroup]="task_form" (submit)="updateTask()" class="task-form">
+                <div class="form-group">
+                    <label for="edit-title" class="form-label">Title</label>
+                    <input type="text" id="edit-title" formControlName="title" class="form-input"
+                        placeholder="Enter task title">
+                </div>
+                <div class="form-group">
+                    <label for="edit-description" class="form-label">Description</label>
+                    <input type="text" id="edit-description" formControlName="description" class="form-input"
+                        placeholder="Enter task description">
+                </div>
+                <div class="form-group">
+                    <label for="edit-finishAt" class="form-label">Finish At</label>
+                    <input type="datetime-local" id="edit-finishAt" formControlName="finishAt" class="form-input">
+                </div>
+                <button type="submit" [disabled]="loadingReq" class="btn btn-primary" style="width: 100%;">
+                    @if(loadingReq) {
+                    <span class="loader"></span>
+                    Updating...
+                    } @else {
+                    Update Task
+                    }
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 }
