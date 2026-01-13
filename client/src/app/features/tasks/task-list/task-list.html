@@ -15,8 +15,8 @@
             </div>
             <div class="form-group">
                 <label for="description" class="form-label">Description</label>
-                <input type="text" id="description" formControlName="description" class="form-input"
-                    placeholder="Enter task description">
+                <textarea id="description" formControlName="description" class="form-input"
+                    placeholder="Enter task description"></textarea>
             </div>
             <div class="form-group">
                 <label for="finishAt" class="form-label">Finish At</label>
@@ -43,6 +43,7 @@
                 <tr>
                     <th>Title</th>
                     <th>Description</th>
+                    <th>State</th>
                     <th>Finish At</th>
                     <th>Completed At</th>
                     <th>Actions</th>
@@ -50,19 +51,26 @@
             </thead>
             <tbody>
                 @for (task of task_list; track task.id) {
-                <tr>
+                <tr [class]="'task-' + task.state">
                     <td>{{task.title}}</td>
                     <td>{{task.description}}</td>
+                    <td>
+                        <span [class]="'state-badge ' + task.state">{{task.state}}</span>
+                    </td>
                     <td>{{task.finishAt | date:'short'}}</td>
                     <td>{{task.completedAt ? (task.completedAt | date:'short') : '-'}}</td>
                     <td>
                         <div class="action-buttons">
                             <button (click)="openShowDetails(task.id)" [disabled]="loadingReq"
                                 class="btn btn-secondary">Details</button>
+                            @if(task.state === 'pending'){
                             <button (click)="openEditForm(task.id)" [disabled]="loadingReq"
                                 class="btn btn-primary">Edit</button>
+                            }
+                            @if(task.state === 'pending') {
                             <button (click)="completeTask(task.id)" [disabled]="loadingReq"
                                 class="btn btn-success">Complete</button>
+                            }
                             <button (click)="delete(task.id)" [disabled]="loadingReq"
                                 class="btn btn-danger">Delete</button>
                         </div>
@@ -151,8 +159,8 @@
                 </div>
                 <div class="form-group">
                     <label for="edit-description" class="form-label">Description</label>
-                    <input type="text" id="edit-description" formControlName="description" class="form-input"
-                        placeholder="Enter task description">
+                    <textarea id="edit-description" formControlName="description" class="form-input"
+                        placeholder="Enter task description"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="edit-finishAt" class="form-label">Finish At</label>

@@ -216,6 +216,14 @@
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
+/* Textarea Specific Styles */
+textarea.form-input {
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
 /* Table Styles */
 .table-container {
     position: relative;
@@ -283,6 +291,74 @@
 
 .task-table tbody tr:last-child td {
     border-bottom: none;
+}
+
+/* Task State Styles */
+.task-table tbody tr.task-pending {
+    background: #fff;
+    border-left: 4px solid #f59e0b;
+}
+
+.task-table tbody tr.task-pending:hover {
+    background: #fffbeb;
+}
+
+.task-table tbody tr.task-completed {
+    background: #f0fdf4;
+    border-left: 4px solid #10b981;
+}
+
+.task-table tbody tr.task-completed:hover {
+    background: #dcfce7;
+}
+
+.task-table tbody tr.task-expired {
+    background: #fef2f2;
+    border-left: 4px solid #ef4444;
+}
+
+.task-table tbody tr.task-expired:hover {
+    background: #fee2e2;
+}
+
+.task-table tbody tr.task-finished {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+}
+
+.task-table tbody tr.task-finished:hover {
+    background: #dbeafe;
+}
+
+/* State Badge */
+.state-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.state-badge.pending {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #78350f;
+}
+
+.state-badge.completed {
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    color: #064e3b;
+}
+
+.state-badge.expired {
+    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+    color: #7f1d1d;
+}
+
+.state-badge.finished {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    color: #1e3a8a;
 }
 
 /* Action Buttons in Table */
